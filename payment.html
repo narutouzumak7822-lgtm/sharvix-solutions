@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment | SHARVIX SOLUTIONS</title>
+  <link rel="stylesheet" href="payment.css">
+</head>
+
+<body>
+
+<header class="topbar">
+  <a class="brand" href="index.html">
+    SHARVIX <span>SOLUTIONS</span>
+  </a>
+  <a href="application.html" class="back">← Back to Application</a>
+</header>
+
+<main class="wrap">
+
+  <div class="eyebrow">APPLICATION / PAYMENT</div>
+
+  <h1>Complete Your Application</h1>
+
+  <p class="intro">
+    Review the platform service fee and submit your payment details.
+  </p>
+
+  <section class="summary panel">
+    <div>
+      <span class="muted">Platform Service Fee</span>
+      <h2>₹49</h2>
+      <span class="muted small">One-time platform service fee</span>
+    </div>
+
+    <div class="pill">Pending Verification</div>
+  </section>
+
+  <section class="panel">
+
+    <h3>1. Pay Using PhonePe</h3>
+
+    <div class="qr-placeholder">
+      <div class="qr-symbol"> <img src="assets/payment.png" alt="QR CODE"> </div>
+      <strong>UPI QR CODE</strong>
+      <span>Official QR code will be added later</span>
+    </div>
+
+    <p class="muted small center">
+      Scan the official QR code and pay exactly ₹49.
+      Verify the recipient name before making payment.
+    </p>
+
+    <h3>2. Submit Payment Details</h3>
+
+    <form id="paymentForm">
+
+      <label>
+        UTR / Transaction ID *
+        <input
+          type="text"
+          name="utr"
+          required
+          minlength="6"
+          maxlength="40"
+          placeholder="Enter Transaction ID"
+        >
+      </label>
+
+      <label>
+        Payment Screenshot (Optional)
+        <input
+          type="file"
+          name="paymentScreenshot"
+          accept="image/*"
+        >
+      </label>
+
+      <label class="consent">
+        <input type="checkbox" required>
+        I confirm that I have paid ₹49 and the transaction details are correct.
+      </label>
+
+      <button class="primary" type="submit">
+        Submit Application →
+      </button>
+
+      <p id="paymentMessage" class="message"></p>
+
+    </form>
+
+  </section>
+
+  <div class="notice">
+    <strong>Important:</strong>
+    This platform service fee does not guarantee a job,
+    interview, selection or placement. Payment will remain
+    Pending Verification until the actual transaction is
+    checked by the company.
+  </div>
+
+</main>
+
+<script src="payment.js"></script>
+
+</body>
+</html>

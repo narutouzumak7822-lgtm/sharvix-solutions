@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SHARVIX Admin Dashboard</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: #090a0f; color: white;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background: #141620; padding: 20px 5%;
+      border-bottom: 1px solid #30313b;
+    }
+    .red { color: #ed3347; }
+    main { width: 94%; max-width: 1300px; margin: 30px auto; }
+    .cards {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 15px; margin: 25px 0;
+    }
+    .card, .panel {
+      background: #141620; border: 1px solid #30313b;
+      border-radius: 12px; padding: 20px;
+    }
+    .card h2 { font-size: 30px; }
+    .yellow { color: #f4c66e; }
+    .green { color: #4ade80; }
+    input {
+      padding: 13px; border-radius: 7px;
+      border: 1px solid #444; background: #090a0f;
+      color: white; width: 100%;
+    }
+    button {
+      padding: 11px 15px; border: 0; border-radius: 7px;
+      color: white; cursor: pointer; margin: 3px;
+    }
+    .refresh { background: #34394b; }
+    .paid { background: #16864b; }
+    .reject { background: #b42335; }
+    .toolbar { display: flex; gap: 10px; margin-bottom: 15px; }
+    .toolbar input { flex: 1; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; min-width: 950px; border-collapse: collapse; }
+    th, td {
+      padding: 13px 10px; text-align: left;
+      border-bottom: 1px solid #30313b; font-size: 13px;
+    }
+    th { color: #ed6877; }
+    a { color: #75b9ff; }
+    #message { color: #f4c66e; }
+    @media(max-width:700px) {
+      .cards { grid-template-columns: 1fr; }
+      .toolbar { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h2>SHARVIX <span class="red">SOLUTIONS</span></h2>
+  <small>ADMIN DASHBOARD</small>
+</header>
+
+<main>
+  <h1>Admin Dashboard</h1>
+
+  <div class="cards">
+    <div class="card">
+      <p>Total Applications</p>
+      <h2 id="totalCount">0</h2>
+    </div>
+    <div class="card">
+      <p>Pending Verification</p>
+      <h2 class="yellow" id="pendingCount">0</h2>
+    </div>
+    <div class="card">
+      <p>Paid Applications</p>
+      <h2 class="green" id="paidCount">0</h2>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="toolbar">
+      <input id="search" type="search"
+        placeholder="Search name, email or Application ID..."
+        oninput="renderApplications()">
+      <button class="refresh" onclick="loadApplications()">Refresh</button>
+    </div>
+
+    <p id="message">Loading applications...</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Application ID</th>
+            <th>Candidate</th>
+            <th>Job Position</th>
+            <th>Resume</th>
+            <th>UTR</th>
+            <th>Screenshot</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="applicationRows"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script>
+let applications = [];
+
+function loadApplications() {
+  document.getElementById("message").textContent =
+    "Loading applications...";
+
+  google.script.run
+    .withSuccessHandler(data => {
+      applications = data || [];
+      updateCounts();
+      renderApplications();
+      document.getElementById("message").textContent =
+        applications.length
+          ? "Applications loaded successfully."
+          : "No applications found.";
+    })
+    .withFailureHandler(error => {
+      document.getElementById("message").textContent =
+        "Error: " + error.message;
+    })
+    .getApplications();
+}
+
+function updateCounts() {
+  document.getElementById("totalCount").textContent =
+    applications.length;
+
+  document.getElementById("pendingCount").textContent =
+    applications.filter(a =>
+      a["Payment Status"] === "Pending Verification").length;
+
+  document.getElementById("paidCount").textContent =
+    applications.filter(a =>
+      a["Payment Status"] === "Paid").length;
+}
+
+function renderApplications() {
+  const tbody = document.getElementById("applicationRows");
+  const query = document.getElementById("search").value.toLowerCase();
+  tbody.replaceChildren();
+
+  const filtered = applications.filter(a => [
+    a["Application ID"], a["Full Name"], a["Email"], a["Job Position"]
+  ].join(" ").toLowerCase().includes(query));
+
+  filtered.forEach(app => {
+    const tr = document.createElement("tr");
+
+    function cell(value) {
+      const td = document.createElement("td");
+      td.textContent = value || "-";
+      tr.appendChild(td);
+    }
+
+    function linkCell(url, label) {
+      const td = document.createElement("td");
+      if (url && /^https:\/\/(drive|docs)\.google\.com\//.test(url)) {
+        const a = document.createElement("a");
+        a.href = url;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = label;
+        td.appendChild(a);
+      } else {
+        td.textContent = "-";
+      }
+      tr.appendChild(td);
+    }
+
+    cell(app["Application ID"]);
+    cell((app["Full Name"] || "") + " / " + (app["Email"] || ""));
+    cell(app["Job Position"]);
+    linkCell(app["Resume Link"], "Open Resume");
+    cell(app["UTR / Transaction ID"]);
+    linkCell(app["Payment Screenshot Link"], "Open Screenshot");
+    cell(app["Payment Status"] || "Not Updated");
+
+    const action = document.createElement("td");
+
+    const paid = document.createElement("button");
+    paid.className = "paid";
+    paid.textContent = "Mark as Paid";
+    paid.onclick = () => changeStatus(app["Application ID"], "Paid");
+
+    const reject = document.createElement("button");
+    reject.className = "reject";
+    reject.textContent = "Reject";
+    reject.onclick = () => changeStatus(app["Application ID"], "Rejected");
+
+    action.append(paid, reject);
+    tr.appendChild(action);
+    tbody.appendChild(tr);
+  });
+
+  if (!filtered.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 8;
+    td.textContent = "No applications found.";
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+  }
+}
+
+function changeStatus(id, status) {
+  const question = status === "Paid"
+    ? "PhonePe / Bank मध्ये पैसे प्रत्यक्ष जमा झाल्याची खात्री केली आहे का?"
+    : "हा Payment Reject करायचा आहे का?";
+
+  if (!confirm(question)) return;
+
+  google.script.run
+    .withSuccessHandler(result => {
+      alert(result.message);
+      loadApplications();
+    })
+    .withFailureHandler(error => {
+      alert("Error: " + error.message);
+    })
+    .updatePaymentStatus(id, status);
+}
+
+window.addEventListener("load", loadApplications);
+</script>
+
+</body>
+</html>

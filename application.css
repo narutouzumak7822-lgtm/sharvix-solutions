@@ -1,0 +1,165 @@
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #090a0f;
+  color: #f5f5f7;
+  font-family: Arial, sans-serif;
+}
+
+.topbar {
+  height: 76px;
+  padding: 0 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #292a32;
+  background: #0d0e14;
+}
+
+.brand {
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: white;
+  text-decoration: none;
+}
+
+.brand span {
+  color: #ed3347;
+}
+
+.back {
+  color: #c5c5ce;
+  text-decoration: none;
+}
+
+.wrap {
+  width: min(900px, 92%);
+  margin: 50px auto 80px;
+}
+
+.eyebrow {
+  color: #f04455;
+  letter-spacing: 3px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 42px;
+  margin: 12px 0;
+}
+
+.intro {
+  color: #aaaeba;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.panel {
+  background: #12141d;
+  border: 1px solid #292c38;
+  border-radius: 18px;
+  padding: 32px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  color: #e8e8ed;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 48px;
+  background: #0b0d13;
+  border: 1px solid #363947;
+  border-radius: 9px;
+  color: white;
+  padding: 12px;
+  font: inherit;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #ef4052;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.consent {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  font-weight: normal;
+  color: #bfc1cb;
+  line-height: 1.5;
+  margin: 24px 0;
+}
+
+.consent input {
+  width: 18px;
+  min-height: 18px;
+  accent-color: #ed3347;
+}
+
+.primary {
+  border: 0;
+  border-radius: 10px;
+  background: #ed3347;
+  color: white;
+  padding: 15px 22px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.primary:hover {
+  background: #c91e32;
+}
+
+.message {
+  color: #f5a5ad;
+}
+
+.notice {
+  font-size: 13px;
+  color: #aeb1bd;
+  line-height: 1.7;
+  margin-top: 22px;
+}
+
+@media (max-width: 650px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wide {
+    grid-column: auto;
+  }
+
+  .panel {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+}

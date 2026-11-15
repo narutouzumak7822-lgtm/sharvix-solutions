@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apply for a Job | SHARVIX SOLUTIONS</title>
+  <link rel="stylesheet" href="application.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="index.html">SHARVIX <span>SOLUTIONS</span></a>
+  <a href="index.html" class="back">← Back to website</a>
+</header>
+
+<main class="wrap">
+  <div class="eyebrow">CAREERS / APPLICATION</div>
+  <h1>Start your application</h1>
+  <p class="intro">Complete your details and upload your resume.</p>
+
+  <form id="applicationForm" class="panel">
+    <div class="grid">
+
+      <label>Full Name *
+        <input name="fullName" required placeholder="Enter your full name">
+      </label>
+
+      <label>Email Address *
+        <input name="email" type="email" required placeholder="Enter email">
+      </label>
+
+      <label>Mobile Number *
+        <input name="phone" type="tel" required placeholder="Enter mobile number">
+      </label>
+
+      <label>Job Position *
+        <select name="jobRole" required>
+          <option value="">Select Position</option>
+          <option>Frontend Developer</option>
+          <option>Web Developer</option>
+          <option>UI / UX Designer</option>
+          <option>Digital Marketing Executive</option>
+          <option>Other</option>
+        </select>
+      </label>
+
+      <label>Qualification *
+        <input name="qualification" required placeholder="Your qualification">
+      </label>
+
+      <label>Experience
+        <select name="experience">
+          <option>Fresher</option>
+          <option>Less than 1 year</option>
+          <option>1–2 years</option>
+          <option>3–5 years</option>
+          <option>5+ years</option>
+        </select>
+      </label>
+
+      <label class="wide">Portfolio URL (Optional)
+        <input name="portfolio" type="url" placeholder="https://">
+      </label>
+
+      <label class="wide">Upload Resume *
+        <input name="resume" type="file" accept=".pdf,.doc,.docx" required>
+      </label>
+
+    </div>
+
+    <label class="consent">
+      <input type="checkbox" required>
+      I confirm that the information provided is correct.
+    </label>
+
+    <button class="primary" type="submit">
+      Continue to Payment →
+    </button>
+
+    <p id="formMessage" class="message"></p>
+  </form>
+
+  <p class="notice">
+    Platform service fee does not guarantee a job, interview or selection.
+  </p>
+</main>
+
+<script src="application.js"></script>
+</body>
+</html>
